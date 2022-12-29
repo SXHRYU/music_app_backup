@@ -3,4 +3,4 @@ __pycache__/
 .pytest_cache/
 venv/
 .mypy_cache/
-run.ps1
+*.ps1
