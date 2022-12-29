@@ -22,11 +22,10 @@ def get_song(song_id: int, db: Session = Depends(get_db)):
     song = crud.get_song_by_id(db, song_id)
     return song
 
-
-# @app.get("/song/{song_id}", response_model=list[schemas.User])
-# def get_song(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     users = crud.get_users(db, skip=skip, limit=limit)
-#     return users
+@app.get("/songs/", response_model=list[schemas.Song])
+def get_all_songs(db: Session = Depends(get_db)):
+    users = crud.get_songs(db)
+    return users
 
 
 # @app.post("/users/", response_model=schemas.User)
