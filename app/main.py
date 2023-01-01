@@ -18,14 +18,20 @@ def get_db():
         db.close()
 
 @app.get("/songs/{song_id}", response_model=schemas.Song)
-def get_song(song_id: int, db: Session = Depends(get_db)):
-    song = crud.get_song_by_id(db, song_id)
+def get_one_song(song_id: int, db: Session = Depends(get_db)):
+    song = crud.get_song(db, song_id)
     return song
 
 @app.get("/songs/", response_model=list[schemas.Song])
 def get_all_songs(db: Session = Depends(get_db)):
     users = crud.get_songs(db)
     return users
+
+@app.post("/songs/", response_model=schemas.Song)
+def add_one_song(song: schemas.Song, db: Session = Depends(get_db)):
+    users = crud.add_song(db, song)
+    return users
+
 
 
 # @app.post("/users/", response_model=schemas.User)
