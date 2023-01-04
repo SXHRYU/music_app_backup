@@ -1,5 +1,5 @@
-from os import getenv
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Request, UploadFile
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from db import crud, models, schemas
@@ -17,20 +17,32 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/songs/{song_id}", response_model=schemas.Song)
+@app.get("/songs/{song_id}")
 def get_one_song(song_id: int, db: Session = Depends(get_db)):
-    song = crud.get_song(db, song_id)
-    return song
+    song: schemas.Song = crud.get_song(db, song_id)
+    headers = {"x-song-name": song.name}
+    # response.headers["artist"] = song.artist
+    return FileResponse(song.path, headers=headers)
 
-@app.get("/songs/", response_model=list[schemas.Song])
-def get_all_songs(db: Session = Depends(get_db)):
-    users = crud.get_songs(db)
-    return users
+# @app.get("/songs/", response_model=list[schemas.Song])
+# def get_all_songs(db: Session = Depends(get_db)):
+#     songs = crud.get_songs(db)
+#     return songs
 
-@app.post("/songs/", response_model=schemas.Song)
-def add_one_song(song: schemas.Song, db: Session = Depends(get_db)):
-    users = crud.add_song(db, song)
-    return users
+@app.post("/songs/", status_code=201, response_model=schemas.Song)
+def add_one_song(song: UploadFile, request: Request, db: Session = Depends(get_db)):
+    song_data = song.file
+    song_name = request.headers["x-song-name"]
+    song = schemas.SongCreate(id=-4, name=song_name, path=f"./music/test/{song_name}", data=song_data.read())
+    with open(song.path, 'wb') as f:
+        crud.add_song(db=db, song=song)
+        f.write(song.data)
+    return schemas.Song(**dict(song))
+
+# @app.post("/songs/", response_model=schemas.Song)
+# def add_one_song(song: schemas.Song, db: Session = Depends(get_db)):
+#     users = crud.add_song(db, song)
+#     return users
 
 
 

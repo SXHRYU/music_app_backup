@@ -10,12 +10,11 @@ def get_songs(db: Session):
     return db.query(models.Song).all()
 
 def add_song(db: Session, song: schemas.SongCreate):
-    db_song = models.Song(id=song.id, name=song.name)
+    db_song = models.Song(id=song.id, name=song.name, path=song.path)
     db.add(db_song)
     db.commit()
     db.refresh(db_song)
     return db_song
-
 
 # def get_items(db: Session, skip: int = 0, limit: int = 100):
 #     return db.query(models.Item).offset(skip).limit(limit).all()

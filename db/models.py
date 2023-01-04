@@ -16,6 +16,7 @@ class Song(Base):
 
     id = Column("id", INTEGER, primary_key=True, index=True)
     name = Column("name", VARCHAR(100), index=True, nullable=False)
+    path = Column("path", VARCHAR(100), nullable=False)
 
 
 # class Artist(Base):

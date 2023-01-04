@@ -4,11 +4,10 @@ from pydantic import BaseModel
 class SongBase(BaseModel):
     id: int
     name: str
-
+    path: str
 
 class SongCreate(SongBase):
-    pass
-
+    data: bytes
 
 class Song(SongBase):
     
