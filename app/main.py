@@ -52,6 +52,3 @@ def add_one_song(song: UploadFile, request: Request, db: Session = Depends(get_d
 #     if db_user:
 #         raise HTTPException(status_code=400, detail="Email already registered")
 #     return crud.create_user(db=db, user=user)
-
-
-

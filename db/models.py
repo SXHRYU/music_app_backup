@@ -1,12 +1,8 @@
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import (
-    JSON,
     INTEGER,
-    SMALLINT,
-    UUID,
     VARCHAR,
 )
-from sqlalchemy.orm import relationship
 
 from .database import Base
 
