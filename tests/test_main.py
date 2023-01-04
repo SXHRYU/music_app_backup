@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.main import app, get_db
-from config.env import (DB_HOST_test, DB_NAME_test, DB_PASSWORD_test,
-                        DB_PORT_test, DB_USER_test)
+from config.test_env import (DB_HOST_test, DB_NAME_test, DB_PASSWORD_test,
+                             DB_PORT_test, DB_USER_test)
 from db.database import Base
 
 SQLALCHEMY_DATABASE_URL = (
