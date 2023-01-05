@@ -12,4 +12,4 @@ class SongCreate(SongBase):
 class Song(SongBase):
     
     class Config:
-        orm_mode = True
+        orm_mode: bool = True

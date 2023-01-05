@@ -1,16 +1,12 @@
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.engine.base import Engine
+from sqlalchemy.orm.decl_api import DeclarativeMeta
 
-from config.env import (
-    DB_USER,
-    DB_PASSWORD,
-    DB_HOST,
-    DB_PORT,
-    DB_NAME,
-)
+from config.env import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER
 
-SQLALCHEMY_DATABASE_URL = (
+SQLALCHEMY_DATABASE_URL: str = (
                             f"postgresql+psycopg2://"
                             + f"{DB_USER}:"
                             + f"{DB_PASSWORD}@"
@@ -19,7 +15,7 @@ SQLALCHEMY_DATABASE_URL = (
                             + f"{DB_NAME}"
 )
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine: Engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal: sessionmaker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+Base: DeclarativeMeta = declarative_base()
