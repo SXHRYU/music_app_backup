@@ -6,5 +6,10 @@ exclude =
     .vscode,
     music,
     venv
+ignore =
+    E302,
+    W503
+count = true
 max-complexity = 10
 max-line-length = 90
+

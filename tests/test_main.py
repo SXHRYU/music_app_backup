@@ -13,12 +13,12 @@ from config.test_env import (DB_HOST_test, DB_NAME_test, DB_PASSWORD_test,
 from db.database import Base
 
 SQLALCHEMY_DATABASE_URL: str = (
-                            f"postgresql+psycopg2://"
-                            + f"{DB_USER_test}:"
-                            + f"{DB_PASSWORD_test}@"
-                            + f"{DB_HOST_test}:"
-                            + f"{DB_PORT_test}/"
-                            + f"{DB_NAME_test}"
+    "postgresql+psycopg2://"
+    + f"{DB_USER_test}:"
+    + f"{DB_PASSWORD_test}@"
+    + f"{DB_HOST_test}:"
+    + f"{DB_PORT_test}/"
+    + f"{DB_NAME_test}"
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -35,9 +35,15 @@ def mock_db() -> Generator[None, None, None]:
         password=DB_PASSWORD_test,
     )
     with conn.cursor() as cur:
-        cur.execute("INSERT INTO songs VALUES (%s, %s, %s);", (-1, "goodo_1", "./music/test/1.mp3"))
-        cur.execute("INSERT INTO songs VALUES (%s, %s, %s);", (-2, "goodo_2", "./music/test/2.mp3"))
-        cur.execute("INSERT INTO songs VALUES (%s, %s, %s);", (-3, "goodo_3", "./music/test/3.mp3"))
+        cur.execute(
+            "INSERT INTO songs VALUES (%s, %s, %s);", (-1, "1.mp3", "./music/test/1.mp3")
+        )
+        cur.execute(
+            "INSERT INTO songs VALUES (%s, %s, %s);", (-2, "2.mp3", "./music/test/2.mp3")
+        )
+        cur.execute(
+            "INSERT INTO songs VALUES (%s, %s, %s);", (-3, "3.mp3", "./music/test/3.mp3")
+        )
         conn.commit()
     yield
     Base.metadata.drop_all(bind=engine)
@@ -59,13 +65,13 @@ def test_get_song_1(mock_db: Generator[None, None, None]) -> None:
     response = client.get("/songs/-1")
     assert response.status_code == 200
     assert response.content == open("./music/test/1.mp3", 'rb').read()
-    assert response.headers["x-song-name"] == "goodo_1"
+    assert response.headers["x-song-name"] == "1.mp3"
 
 def test_get_song_2(mock_db: Generator[None, None, None]) -> None:
     response = client.get("/songs/-2")
     assert response.status_code == 200
     assert response.content == open("./music/test/2.mp3", 'rb').read()
-    assert response.headers["x-song-name"] == "goodo_2"
+    assert response.headers["x-song-name"] == "2.mp3"
 
 # def test_get_all_songs(mock_db):
 #     response = client.get("/songs/")
@@ -90,7 +96,7 @@ def test_get_song_2(mock_db: Generator[None, None, None]) -> None:
 
 def test_add_song(mock_db: Generator[None, None, None]) -> None:
     files = {
-        "song": open("tests/audio.mp3", 'rb').read(),
+        "uploaded_song": open("tests/audio.mp3", 'rb').read(),
     }
     headers = {
         "x-song-name": "4.mp3"

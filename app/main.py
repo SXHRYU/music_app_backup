@@ -9,7 +9,7 @@ from db.database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app: FastAPI = FastAPI()
 
 # Dependency
 def get_db() -> Generator[Session, None, None]:
@@ -20,7 +20,7 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 @app.get("/songs/{song_id}")
-def get_one_song(song_id: int, db: Session = Depends(get_db)) -> FileResponse | JSONResponse:
+def get_song(song_id: int, db: Session = Depends(get_db)) -> FileResponse | JSONResponse:
     song: models.Song | None = crud.get_song(db, song_id)
     if not song:
         return JSONResponse(
@@ -40,10 +40,18 @@ def get_one_song(song_id: int, db: Session = Depends(get_db)) -> FileResponse | 
 #     return songs
 
 @app.post("/songs/", status_code=201, response_model=schemas.Song)
-def add_one_song(uploaded_song: UploadFile, request: Request, db: Session = Depends(get_db)) -> schemas.Song:
+def add_song(
+    uploaded_song: UploadFile,
+    request: Request,
+    db: Session = Depends(get_db)
+) -> schemas.Song:
     song_data: BinaryIO = uploaded_song.file
     song_name: str = request.headers["x-song-name"]
-    song: schemas.SongCreate = schemas.SongCreate(id=-4, name=song_name, path=f"./music/test/{song_name}", data=song_data.read())
+
+    song: schemas.SongCreate = schemas.SongCreate(id=-4,
+                                                  name=song_name,
+                                                  path=f"./music/test/{song_name}",
+                                                  data=song_data.read())
     with open(song.path, 'wb') as f:
         crud.add_song(db=db, song=song)
         f.write(song.data)
@@ -53,8 +61,6 @@ def add_one_song(uploaded_song: UploadFile, request: Request, db: Session = Depe
 # def add_one_song(song: schemas.Song, db: Session = Depends(get_db)):
 #     users = crud.add_song(db, song)
 #     return users
-
-
 
 # @app.post("/users/", response_model=schemas.User)
 # def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):

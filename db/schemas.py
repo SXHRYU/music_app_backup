@@ -10,6 +10,6 @@ class SongCreate(SongBase):
     data: bytes
 
 class Song(SongBase):
-    
+
     class Config:
         orm_mode: bool = True
