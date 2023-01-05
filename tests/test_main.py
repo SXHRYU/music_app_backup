@@ -1,17 +1,18 @@
+from typing import Generator
 from pathlib import Path
 
 import psycopg2
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 
 from app.main import app, get_db
 from config.test_env import (DB_HOST_test, DB_NAME_test, DB_PASSWORD_test,
                              DB_PORT_test, DB_USER_test)
 from db.database import Base
 
-SQLALCHEMY_DATABASE_URL = (
+SQLALCHEMY_DATABASE_URL: str = (
                             f"postgresql+psycopg2://"
                             + f"{DB_USER_test}:"
                             + f"{DB_PASSWORD_test}@"
@@ -24,7 +25,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 @pytest.fixture(scope="module")
-def mock_db():
+def mock_db() -> Generator[None, None, None]:
     Base.metadata.create_all(bind=engine)
     conn = psycopg2.connect(
         host=DB_HOST_test,
@@ -41,9 +42,9 @@ def mock_db():
     yield
     Base.metadata.drop_all(bind=engine)
 
-def override_get_db():
+def override_get_db() -> Generator[Session, None, None]:
     try:
-        db = TestingSessionLocal()
+        db: Session = TestingSessionLocal()
         yield db
     finally:
         db.close()
@@ -54,13 +55,13 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-def test_get_song_1(mock_db):
+def test_get_song_1(mock_db: Generator[None, None, None]) -> None:
     response = client.get("/songs/-1")
     assert response.status_code == 200
     assert response.content == open("./music/test/1.mp3", 'rb').read()
     assert response.headers["x-song-name"] == "goodo_1"
 
-def test_get_song_2(mock_db):
+def test_get_song_2(mock_db: Generator[None, None, None]) -> None:
     response = client.get("/songs/-2")
     assert response.status_code == 200
     assert response.content == open("./music/test/2.mp3", 'rb').read()
@@ -87,7 +88,7 @@ def test_get_song_2(mock_db):
 #         },
 #     ]
 
-def test_add_song(mock_db):
+def test_add_song(mock_db: Generator[None, None, None]) -> None:
     files = {
         "song": open("tests/audio.mp3", 'rb').read(),
     }
