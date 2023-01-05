@@ -1,11 +1,11 @@
-from typing import Generator
 from pathlib import Path
+from typing import Generator
 
 import psycopg2
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.main import app, get_db
 from config.test_env import (DB_HOST_test, DB_NAME_test, DB_PASSWORD_test,

@@ -1,4 +1,4 @@
-from typing import Any, Generator, BinaryIO
+from typing import Any, BinaryIO, Generator
 
 from fastapi import Depends, FastAPI, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
