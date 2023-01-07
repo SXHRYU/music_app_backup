@@ -6,10 +6,11 @@ class SongBase(BaseModel):
     name: str
     path: str
 
+
 class SongCreate(SongBase):
     data: bytes
 
-class Song(SongBase):
 
+class Song(SongBase):
     class Config:
         orm_mode: bool = True

@@ -16,6 +16,8 @@ SQLALCHEMY_DATABASE_URL: str = (
 )
 
 engine: Engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal: sessionmaker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal: sessionmaker = sessionmaker(
+    autocommit=False, autoflush=False, bind=engine
+)
 
 Base: DeclarativeMeta = declarative_base()

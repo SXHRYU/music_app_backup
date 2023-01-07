@@ -1,0 +1,18 @@
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
+implicit_reexport = true
+exclude = "(?x) (sample/ | venv/ | music/)"
+plugins = "sqlmypy"
+
+[tool.black]
+line-length = 90
+skip-magic-trailing-comma = true
+extend-exclude = '''
+(
+    \__pycache__
+    | \.pytest_cache
+    | \.vscode
+    | \music
+)
+'''
