@@ -21,17 +21,15 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 
-@app.get("/songs/{song_id}")
-def get_song(
-    song_id: int, db: Session = Depends(get_db)
-) -> FileResponse | JSONResponse:
+@app.get("/songs/{song_id}", response_model=schemas.SongCreate)
+def get_song(song_id: int, db: Session = Depends(get_db)) -> Any:
     song: models.Song | None = crud.get_song(db, song_id)
     if not song:
         return JSONResponse(
             status_code=404, content={"message": "No song with such ID exists"}
         )
     else:
-        headers: dict[str, Any] = {"x-song-name": song.name}
+        headers: dict[str, str] = {"x-song-name": song.name}
         # response.headers["artist"] = song.artist
         return FileResponse(song.path, headers=headers)
 
