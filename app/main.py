@@ -48,21 +48,3 @@ def add_song(
         crud.add_song(db=db, song=song)
         f.write(song.data)
     return schemas.Song(**dict(song))
-
-
-# @app.get("/songs/", response_model=list[schemas.Song])
-# def get_all_songs(db: Session = Depends(get_db)):
-#     songs = crud.get_songs(db)
-#     return songs
-
-# @app.post("/songs/", response_model=schemas.Song)
-# def add_one_song(song: schemas.Song, db: Session = Depends(get_db)):
-#     users = crud.add_song(db, song)
-#     return users
-
-# @app.post("/users/", response_model=schemas.User)
-# def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-#     db_user = crud.get_user_by_email(db, email=user.email)
-#     if db_user:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-#     return crud.create_user(db=db, user=user)

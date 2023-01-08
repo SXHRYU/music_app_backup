@@ -85,28 +85,6 @@ def test_get_song_2(mock_db: Generator[None, None, None]) -> None:
     assert response.headers["x-song-name"] == "2.mp3"
 
 
-# def test_get_all_songs(mock_db):
-#     response = client.get("/songs/")
-#     assert response.status_code == 200
-#     assert response.json() == [
-#         {
-#             "id": -1,
-#             "name": "goodo_1",
-#              "path": "/music/07 The Stains of Time (Maniac Agenda Mix).mp3",
-#         },
-#         {
-#             "id": -2,
-#             "name": "goodo_2",
-#             "path": "/music/08 Red Sun (Maniac Agenda Mix).mp3",
-#         },
-#         {
-#             "id": -3,
-#             "name": "goodo_3",
-#             "path": "09 A Soul Can’t Be Cut (Platinum Mix).mp3",
-#         },
-#     ]
-
-
 def test_add_song(mock_db: Generator[None, None, None]) -> None:
     files = {
         "uploaded_song": open("tests/audio.mp3", "rb").read(),
