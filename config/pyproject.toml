@@ -16,3 +16,6 @@ extend-exclude = '''
     | \music
 )
 '''
+
+[tool.bandit]
+exclude_dirs = ["venv", "tests"]
