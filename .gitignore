@@ -4,5 +4,4 @@ __pycache__/
 venv/
 .mypy_cache/
 *.ps1
-music/
 *.mp3
