@@ -8,7 +8,7 @@ jobs:
       DB_USER: ""
       DB_PASSWORD: ""
       DB_NAME: ""
-      DB_PORT: ""
+      DB_PORT: "1" # so int(DB_PORT) works
       DB_HOST: ""
       DB_USER_test: test_user
       DB_PASSWORD_test: test_password

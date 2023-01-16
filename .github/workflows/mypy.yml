@@ -14,7 +14,7 @@ jobs:
           cache: 'pip'
 
       - name: Installing dependencies
-        run: pip install sqlmypy
+        run: pip install sqlalchemy-stubs
 
       - name: Installing mypy
         run: pip install mypy
