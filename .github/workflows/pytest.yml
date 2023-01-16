@@ -1,0 +1,49 @@
+name: pytest
+on: [push, pull_request]
+jobs:
+  # Job name
+  test-main:
+    runs-on: ubuntu-latest
+    env:
+      DB_USER: ""
+      DB_PASSWORD: ""
+      DB_NAME: ""
+      DB_PORT: ""
+      DB_HOST: ""
+      DB_USER_test: test_user
+      DB_PASSWORD_test: test_password
+      DB_NAME_test: test_db
+      DB_PORT_test: 5432
+      DB_HOST_test: localhost
+      
+    # Create mock database for sql operations.
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+        # Map PostgreSQL container to host's port 5432.
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+        # Every step must be separated by a hyphen ('-').
+      - name: Setting up Python
+        uses: actions/setup-python@main
+        with:
+          python-version: '3.11.1'
+          cache: 'pip'
+      
+      - name: Installing Dependencies
+        run: pip install -r requirements.txt
+
+      - name: pytest -v .
+        run: pytest -v .
