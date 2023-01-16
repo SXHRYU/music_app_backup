@@ -10,10 +10,10 @@ line-length = 90
 skip-magic-trailing-comma = true
 extend-exclude = '''
 (
-    \__pycache__
-    | \.pytest_cache
-    | \.vscode
-    | \music
+    /__pycache__
+    | /.pytest_cache
+    | /.vscode
+    | /music
 )
 '''
 
